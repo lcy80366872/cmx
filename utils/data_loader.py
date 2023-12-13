@@ -44,7 +44,7 @@ class ImageLidarDataset(data.Dataset):
             mask = (1 - mask) * 255
         if mask.ndim == 2:
             mask = np.expand_dims(mask, axis=2)
-     
+
         return img, mask, lidar
 
     def _concat_images(self, image1, image2):

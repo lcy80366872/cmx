@@ -42,6 +42,7 @@ class Solver:
         if volatile:
             with torch.no_grad():
                 self.img = Variable(self.img.cuda())
+                self.gps = Variable(self.gps.cuda())
         else:
             self.img = Variable(self.img.cuda())
             self.gps = Variable(self.gps.cuda())
