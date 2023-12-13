@@ -110,14 +110,14 @@ class ImageLidarDataset(data.Dataset):
 
 
 class ImageGPSDataset(data.Dataset):
-    def __init__(self, image_list, sat_root, mask_root, gps_root, edge_root, sat_suffix="png", mask_suffix="png",
+    def __init__(self, image_list, sat_root, mask_root, gps_root, sat_suffix="png", mask_suffix="png",
                  pgs_suffix="jpg", randomize=True, down_scale=True, down_resolution=512):
         self.image_list = image_list
 
         self.sat_root = sat_root
         self.mask_root = mask_root
         self.gps_root = gps_root
-        self.edge_root = edge_root
+
 
         self.sat_suffix = sat_suffix
         self.mask_suffix = mask_suffix
@@ -131,24 +131,19 @@ class ImageGPSDataset(data.Dataset):
         img_path = os.path.join(self.sat_root, "{0}_sat.{1}").format(image_id, self.sat_suffix)
         mask_path = os.path.join(self.mask_root, "{0}_mask.{1}").format(image_id, self.mask_suffix)
         gps_path = os.path.join(self.gps_root, "{0}_gps.{1}").format(image_id, self.gps_suffix)
-        edge_path = os.path.join(self.edge_root, "{0}_mask.{1}").format(image_id, self.mask_suffix)
 
         img = cv2.imread(img_path)
         mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
         gps = cv2.imread(gps_path, cv2.IMREAD_GRAYSCALE)
-        edge = cv2.imread(edge_path, cv2.IMREAD_GRAYSCALE)
 
         assert (img is not None), img_path
         assert (mask is not None), mask_path
         assert (gps is not None), gps_path
 
-        assert (edge is not None), edge_path
+
         if mask.ndim == 2:
             mask = np.expand_dims(mask, axis=2)
-        if edge.ndim == 2:
-            edge = np.expand_dims(edge, axis=2)
 
-        mask = self._concat_images(mask, edge)
 
         return img, mask, gps
 
@@ -192,8 +187,7 @@ class ImageGPSDataset(data.Dataset):
 
         try:
             img = np.array(img, np.float32).transpose(2, 0, 1) / 255.0 * 3.2 - 1.6
-            mask = np.array(mask, np.float32).transpose(2, 0, 1)
-            mask[0, :, :] = mask[0, :, :] / 255.0
+            mask = np.array(mask, np.float32).transpose(2, 0, 1)/ 255.0
         except Exception as e:
             print(e)
             print(img.shape, mask.shape)

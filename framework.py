@@ -71,21 +71,21 @@ class Solver:
         self.data2cuda()
 
         self.optimizer.zero_grad()
-        pred,loss = self.net(self.img, self.gps, self.mask[:,0,:,:])
+        pred,loss = self.net(self.img, self.gps, self.mask)
 
 
         loss.backward()
         self.optimizer.step()
-        batch_iou, intersection, union = self.metrics(self.mask[:,0,:,:].unsqueeze(1), pred)
+        batch_iou, intersection, union = self.metrics(self.mask.unsqueeze(1), pred)
         return pred, loss.item(), batch_iou, intersection, union
 
     def test_batch(self):
         self.net.eval()
         self.data2cuda(volatile=True)
 
-        pred, loss = self.net(self.img, self.gps, self.mask[:, 0, :, :])
+        pred, loss = self.net(self.img, self.gps, self.mask)
 
-        batch_iou, intersection, union = self.metrics(self.mask[:,0,:,:].unsqueeze(1), pred)
+        batch_iou, intersection, union = self.metrics(self.mask.unsqueeze(1), pred)
         pred = pred.cpu().data.numpy().squeeze(1)
         return pred, loss.item(), batch_iou, intersection, union
 
