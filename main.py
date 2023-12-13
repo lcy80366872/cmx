@@ -85,7 +85,7 @@ if __name__ == "__main__":
     parser.add_argument('--model', type=str, default='CMMPNet')
     parser.add_argument('--lr',    type=float, default=2e-4)
     parser.add_argument('--name',  type=str, default='')
-    parser.add_argument('--batch_size', type=int, default=2)
+    parser.add_argument('--batch_size', type=int, default=1)
     # parser.add_argument('--sat_dir', type=str, default='/home/imi432004/BJRoad/BJRoad/train_val/image')
     # parser.add_argument('--mask_dir', type=str, default='/home/imi432004/BJRoad/BJRoad/train_val/mask')
     # parser.add_argument('--gps_dir', type=str, default='/home/imi432004/BJRoad/BJRoad/train_val/gps')

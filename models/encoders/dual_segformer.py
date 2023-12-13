@@ -433,6 +433,7 @@ class RGBXTransformer(nn.Module):
 
     def forward(self, x_rgb, x_e):
         out = self.forward_features(x_rgb, x_e)
+        out = torch.sigmoid(out)
         return out
 
 
