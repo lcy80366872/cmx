@@ -72,9 +72,9 @@ class Solver:
         self.data2cuda()
 
         self.optimizer.zero_grad()
-        pred= self.net(self.img, self.gps, self.mask)
+        loss,pred= self.net(self.img, self.gps, self.mask)
 
-        loss = self.loss(self.mask, pred)
+        # loss = self.loss(self.mask, pred)
         loss.backward()
         self.optimizer.step()
         batch_iou, intersection, union = self.metrics(self.mask.unsqueeze(1), pred)
@@ -84,8 +84,8 @@ class Solver:
         self.net.eval()
         self.data2cuda(volatile=True)
 
-        pred = self.net(self.img, self.gps, self.mask)
-        loss = self.loss(self.mask, pred)
+        loss,pred = self.net(self.img, self.gps, self.mask)
+        # loss = self.loss(self.mask, pred)
         batch_iou, intersection, union = self.metrics(self.mask.unsqueeze(1), pred)
         pred = pred.cpu().data.numpy().squeeze(1)
         return pred, loss.item(), batch_iou, intersection, union

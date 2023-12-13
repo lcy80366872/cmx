@@ -121,5 +121,5 @@ class EncoderDecoder(nn.Module):
             loss = self.criterion(out, label.long())
             if self.aux_head:
                 loss += self.aux_rate * self.criterion(aux_fm, label.long())
-            return loss
+            return loss,out
         return out
