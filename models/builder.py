@@ -117,5 +117,9 @@ class EncoderDecoder(nn.Module):
             out, aux_fm = self.encode_decode(rgb, modal_x)
         else:
             out = self.encode_decode(rgb, modal_x)
-
+        if label is not None:
+            loss = self.criterion(out, label.long())
+            if self.aux_head:
+                loss += self.aux_rate * self.criterion(aux_fm, label.long())
+            return loss
         return out
