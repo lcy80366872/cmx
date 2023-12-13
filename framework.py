@@ -35,6 +35,7 @@ class Solver:
     def set_input(self, img_batch, mask_batch=None):
         self.img = img_batch[:,:3,:,:]
         self.gps = img_batch[:,3,:,:]
+        self.gps=torch.unsqueeze(self.gps,1)
         self.mask = mask_batch
 
     def data2cuda(self, volatile=False):
