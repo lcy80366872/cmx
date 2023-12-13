@@ -9,14 +9,14 @@ from .image_augmentation import *
 # from skimage.segmentation import slic
 
 class ImageLidarDataset(data.Dataset):
-    def __init__(self, image_list, sat_root, mask_root, lidar_root, edge_root, sat_suffix="png", mask_suffix="png",
+    def __init__(self, image_list, sat_root, mask_root, lidar_root, sat_suffix="png", mask_suffix="png",
                  lidar_suffix="png", randomize=False, mask_transform=False, adjust_resolution=-1):
         self.image_list = image_list
 
         self.sat_root = sat_root
         self.mask_root = mask_root
         self.lidar_root = lidar_root
-        self.edge_root = edge_root
+
 
         self.sat_suffix = sat_suffix
         self.mask_suffix = mask_suffix
@@ -32,14 +32,11 @@ class ImageLidarDataset(data.Dataset):
                           cv2.IMREAD_GRAYSCALE)
         lidar = cv2.imread(os.path.join(self.lidar_root, "{0}.{1}").format(image_id, self.lidar_suffix),
                            cv2.IMREAD_GRAYSCALE)
-        edge_path = os.path.join(self.edge_root, "{0}.{1}").format(image_id, self.mask_suffix)
 
-        edge = cv2.imread(edge_path, cv2.IMREAD_GRAYSCALE)
 
         assert (img is not None), os.path.join(self.sat_root, "{0}.{1}").format(image_id, self.sat_suffix)
         assert (mask is not None), os.path.join(self.mask_root, "{0}.{1}").format(image_id, self.mask_suffix)
         assert (lidar is not None), os.path.join(self.lidar_root, "{0}.{1}").format(image_id, self.lidar_suffix)
-        assert (edge is not None), os.path.join(self.edge_root, "{0}.{1}").format(image_id, self.mask_suffix)
 
         ## In TLCGIS, the foreground value is 0 and the background value is 1.
         ## The background value is transformed to 0 and the foreground value is transformed to 1 (255)
@@ -47,10 +44,7 @@ class ImageLidarDataset(data.Dataset):
             mask = (1 - mask) * 255
         if mask.ndim == 2:
             mask = np.expand_dims(mask, axis=2)
-        if edge.ndim == 2:
-            edge = np.expand_dims(edge, axis=2)
-
-        mask = self._concat_images(mask, edge)
+     
         return img, mask, lidar
 
     def _concat_images(self, image1, image2):
