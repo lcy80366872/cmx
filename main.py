@@ -110,7 +110,7 @@ if __name__ == "__main__":
     parser.add_argument('--weight_save_dir', type=str, default='./save_model')
     parser.add_argument('--val_size', type=float, default=0.1)
     parser.add_argument('--use_gpu',  type=bool, default=True)
-    parser.add_argument('--gpu_ids',  type=str, default='1')
+    parser.add_argument('--gpu_ids',  type=str, default='0')
     parser.add_argument('--workers',  type=int, default=0)
     parser.add_argument('--epochs',  type=int, default=30)
     parser.add_argument('--random_seed', type=int, default=12345)
